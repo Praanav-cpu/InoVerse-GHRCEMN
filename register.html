@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Inoverse Ideathon</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="noise-overlay"></div>
+  <div class="purple-glow left"></div>
+  <div class="purple-glow right"></div>
+
+  <header class="page-header">
+    <nav>
+      <div class="logo">
+        <a href="index.html">
+          <span>Inoverse</span>
+          <span class="highlight">Ideathon</span>
+        </a>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <i class="fas fa-times" onclick="hideMenu()"></i>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="schedule.html">Schedule</a></li>
+          <li><a href="register.html" class="active btn-nav">Register</a></li>
+        </ul>
+      </div>
+      <i class="fas fa-bars" onclick="showMenu()"></i>
+    </nav>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="animate-text">Register Now</h1>
+      <p class="animate-text-delay">Join Nagpur's 1st Ideathon </p>
+    </div>
+  </section>
+
+  <section class="register-section">
+    <div class="container">
+      <div class="register-grid">
+        <div class="register-info reveal-text">
+          <h2>Why Participate?</h2>
+          <ul class="benefits-list">
+            <li><i class="fas fa-trophy"></i> Win exciting prizes worth ₹2,00,000+</li>
+            <li><i class="fas fa-lightbulb"></i> Transform your innovative ideas into reality</li>
+            <li><i class="fas fa-users"></i> Network with industry experts and like-minded individuals</li>
+            <li><i class="fas fa-briefcase"></i> Potential internship and job opportunities</li>
+            <li><i class="fas fa-graduation-cap"></i> Learn from workshops and mentoring sessions</li>
+            <li><i class="fas fa-certificate"></i> Get certificates and recognition</li>
+          </ul>
+          <div class="important-dates">
+            <h3>Important Dates</h3>
+            <ul>
+              <li><strong>Registration Deadline:</strong> July 25, 2024</li>
+              <li><strong>Team Formation:</strong> August 1, 2024</li>
+              <li><strong>Hackathon:</strong> August 15-16, 2024</li>
+            </ul>
+          </div>
+        </div>
+        <div class="register-form-container reveal-card">
+          <h2>Registration Form</h2>
+          <form id="registrationForm" class="register-form">
+            <div class="form-group">
+              <label for="fullName">Full Name *</label>
+              <input type="text" id="fullName" name="fullName" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+              <label for="institution">Institution/Organization *</label>
+              <input type="text" id="institution" name="institution" required>
+            </div>
+            <div class="form-group">
+              <label for="role">Your Role *</label>
+              <select id="role" name="role" required>
+                <option value="">Select your role</option>
+                <option value="student">Student</option>
+                <option value="professional">Professional</option>
+                <option value="entrepreneur">Entrepreneur</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="teamStatus">Team Status *</label>
+              <select id="teamStatus" name="teamStatus" required>
+                <option value="">Select option</option>
+                <option value="individual">Registering as Individual (Find teammates later)</option>
+                <option value="team">Registering a Team</option>
+              </select>
+            </div>
+            <div class="form-group team-name-group hidden">
+              <label for="teamName">Team Name</label>
+              <input type="text" id="teamName" name="teamName">
+            </div>
+            <div class="form-group">
+              <label for="experience">Experience with Web3/Blockchain *</label>
+              <select id="experience" name="experience" required>
+                <option value="">Select your experience level</option>
+                <option value="beginner">Beginner (No prior experience)</option>
+                <option value="intermediate">Intermediate (Some experience)</option>
+                <option value="advanced">Advanced (Significant experience)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="track">Preferred Track *</label>
+              <select id="track" name="track" required>
+                <option value="">Select preferred track</option>
+                <option value="defi">DeFi</option>
+                <option value="gamefi">GameFi</option>
+                <option value="nft">NFTs</option>
+                <option value="infrastructure">Web3 Infrastructure</option>
+                <option value="open">Open Innovation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="expectations">What do you hope to achieve at the hackathon?</label>
+              <textarea id="expectations" name="expectations" rows="3"></textarea>
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="termsAgree" name="termsAgree" required>
+              <label for="termsAgree">I agree to the <a href="#" class="terms-link">Terms and Conditions</a> *</label>
+            </div>
+            <div class="form-submit">
+              <button type="submit" class="btn primary-btn">Submit Registration</button>
+            </div>
+          </form>
+          <div id="registrationSuccess" class="registration-success hidden">
+            <i class="fas fa-check-circle"></i>
+            <h3>Registration Successful!</h3>
+            <p>Thank you for registering for the Inoverse Ideathon. We've sent a confirmation email with further details.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <h3>Inoverse Ideathon</h3>
+          <p>Building the future of Web3 in Kerala</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>

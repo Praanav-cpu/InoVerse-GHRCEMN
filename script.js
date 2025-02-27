@@ -1,224 +1,129 @@
-// Enhanced smooth scroll with easing
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href');
-      const target = document.querySelector(targetId);
-      
-      
-      document.querySelectorAll('.nav-links a').forEach(link => {
-        link.classList.remove('active');
-      });
-      this.classList.add('active');
-      
-       
-      const startPosition = window.pageYOffset;
-      const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
-      const distance = targetPosition - startPosition;
-      const duration = 1000;
-      let start = null;
-      
-      window.requestAnimationFrame(step);
-      
-      function step(timestamp) {
-        if (!start) start = timestamp;
-        const progress = timestamp - start;
-        const percentage = Math.min(progress / duration, 1);
-        
-         
-        const easing = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        
-        window.scrollTo(0, startPosition + distance * easing(percentage));
-        
-        if (progress < duration) {
-          window.requestAnimationFrame(step);
-        }
-      }
-    });
-  });
-  
-  
-  function reveal() {
-    const reveals = document.querySelectorAll('.reveal');
-    
-    reveals.forEach((element, index) => {
-      const windowHeight = window.innerHeight;
-      const elementTop = element.getBoundingClientRect().top;
-      const elementVisible = 150;
-      
-      if (elementTop < windowHeight - elementVisible) {
-        setTimeout(() => {
-          element.classList.add('active');
-        }, index * 100); // Stagger effect
-      }
-    });
+// Mobile Navigation
+function showMenu() {
+    document.getElementById("navLinks").style.right = "0";
   }
   
-  window.addEventListener('scroll', reveal);
-  reveal(); // Initial check
+  function hideMenu() {
+    document.getElementById("navLinks").style.right = "-200px";
+  }
   
-  // Enhanced navbar scroll effect with transparency
-  const navbar = document.querySelector('.navbar');
-  let lastScroll = 0;
+  // GSAP Animations
+  document.addEventListener("DOMContentLoaded", function() {
+    // Register ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
   
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    const scrollDirection = currentScroll > lastScroll ? 'down' : 'up';
-    
-    // Update navbar transparency based on scroll position
-    const scrollPercentage = Math.min(currentScroll / 500, 1);
-    const backgroundColor = `rgba(26, 26, 26, ${0.9 + (scrollPercentage * 0.1)})`;
-    
-    if (currentScroll <= 0) {
-      navbar.style.background = 'rgba(26, 26, 26, 0.9)';
-      navbar.style.transform = 'translateY(0)';
-    } else if (scrollDirection === 'down' && currentScroll > 100) {
-      navbar.style.transform = 'translateY(-100%)';
-    } else {
-      navbar.style.transform = 'translateY(0)';
-      navbar.style.background = backgroundColor;
-    }
-    
-    lastScroll = currentScroll;
-    
-    // Update active section in navbar
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - 100;
-      const sectionBottom = sectionTop + section.offsetHeight;
+    // Reveal animations for cards and text
+    const revealCards = document.querySelectorAll('.reveal-card');
+    revealCards.forEach(card => {
+      ScrollTrigger.create({
+        trigger: card,
+        start: "top 85%",
+        onEnter: () => card.classList.add('active'),
+        once: true
+      });
+    });
+  
+    const revealTexts = document.querySelectorAll('.reveal-text');
+    revealTexts.forEach(text => {
+      ScrollTrigger.create({
+        trigger: text,
+        start: "top 85%",
+        onEnter: () => text.classList.add('active'),
+        once: true
+      });
+    });
+  
+    // Stats counter animation
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach(stat => {
+      const target = parseInt(stat.getAttribute('data-count'));
       
-      if (currentScroll >= sectionTop && currentScroll < sectionBottom) {
-        const id = section.getAttribute('id');
-        document.querySelectorAll('.nav-links a').forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === `#${id}`) {
-            link.classList.add('active');
+      ScrollTrigger.create({
+        trigger: stat,
+        start: "top 85%",
+        onEnter: () => {
+          let count = 0;
+          const duration = 2000; // 2 seconds
+          const interval = 50; // Update every 50ms
+          const increment = Math.ceil(target / (duration / interval));
+          
+          const counter = setInterval(() => {
+            count += increment;
+            if (count >= target) {
+              count = target;
+              clearInterval(counter);
+            }
+            stat.textContent = count;
+          }, interval);
+        },
+        once: true
+      });
+    });
+  
+    // FAQ toggle
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
+  
+    // Schedule tabs
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons and content
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // Add active class to clicked button and corresponding content
+        btn.classList.add('active');
+        const tabId = btn.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+  
+    // Registration form team name toggle
+    const teamStatus = document.getElementById('teamStatus');
+    if (teamStatus) {
+      teamStatus.addEventListener('change', function() {
+        const teamNameGroup = document.querySelector('.team-name-group');
+        if (this.value === 'team') {
+          teamNameGroup.classList.remove('hidden');
+        } else {
+          teamNameGroup.classList.add('hidden');
+        }
+      });
+    }
+  
+    // Registration form submission
+    const registrationForm = document.getElementById('registrationForm');
+    if (registrationForm) {
+      registrationForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Simple form validation
+        const requiredFields = document.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            isValid = false;
+            field.style.borderColor = 'red';
+          } else {
+            field.style.borderColor = 'rgba(255, 255, 255, 0.2)';
           }
         });
-      }
-    });
-  });
-  
-  // Enhanced form submission with validation and animation
-  const form = document.querySelector('.register-form');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const submitBtn = form.querySelector('.submit-btn');
-    const originalText = submitBtn.textContent;
-    
-    // Validate form
-    const inputs = form.querySelectorAll('input, textarea');
-    let isValid = true;
-    
-    inputs.forEach(input => {
-      if (!input.value.trim()) {
-        isValid = false;
-        input.style.borderColor = '#ff4444';
-        shake(input);
-      } else {
-        input.style.borderColor = '';
-      }
-    });
-    
-    if (!isValid) return;
-    
-    // Animate button
-    submitBtn.textContent = 'Submitting...';
-    submitBtn.disabled = true;
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Success animation
-    submitBtn.textContent = 'Success!';
-    submitBtn.style.background = 'linear-gradient(to right, #34d399, #3b82f6)';
-    
-    // Reset form
-    setTimeout(() => {
-      form.reset();
-      submitBtn.textContent = originalText;
-      submitBtn.style.background = '';
-      submitBtn.disabled = false;
-      
-      // Show success message
-      const message = document.createElement('div');
-      message.textContent = 'Thank you for registering! We will contact you soon.';
-      message.style.color = '#34d399';
-      message.style.textAlign = 'center';
-      message.style.marginTop = '1rem';
-      message.style.opacity = '0';
-      form.appendChild(message);
-      
-      // Fade in message
-      requestAnimationFrame(() => {
-        message.style.transition = 'opacity 0.3s ease';
-        message.style.opacity = '1';
+        
+        if (isValid) {
+          // Hide form and show success message
+          registrationForm.style.display = 'none';
+          document.getElementById('registrationSuccess').classList.remove('hidden');
+          
+          // In a real application, you would send the form data to a server here
+          console.log('Form submitted successfully');
+        }
       });
-      
-      // Remove message after 5 seconds
-      setTimeout(() => {
-        message.style.opacity = '0';
-        setTimeout(() => message.remove(), 300);
-      }, 5000);
-    }, 2000);
-  });
-  
-  // Shake animation for invalid inputs
-  function shake(element) {
-    element.style.animation = 'none';
-    requestAnimationFrame(() => {
-      element.style.animation = 'shake 0.5s ease';
-    });
-  }
-  
-  // Enhanced parallax effect for hero shapes
-  document.addEventListener('mousemove', (e) => {
-    const shapes = document.querySelectorAll('.shape');
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-    
-    shapes.forEach((shape, index) => {
-      const speed = index === 0 ? 20 : index === 1 ? 30 : 15;
-      const x = (mouseX - centerX) / speed;
-      const y = (mouseY - centerY) / speed;
-      
-      shape.style.transform = `translate(${x}px, ${y}px)`;
-    });
-  });
-  
-  // Add custom cursor effect
-  const cursor = document.createElement('div');
-  cursor.className = 'custom-cursor';
-  document.body.appendChild(cursor);
-  
-  let cursorTimeout;
-  document.addEventListener('mousemove', (e) => {
-    cursor.style.opacity = '1';
-    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-    
-    clearTimeout(cursorTimeout);
-    cursorTimeout = setTimeout(() => {
-      cursor.style.opacity = '0';
-    }, 2000);
-  });
-  
-  // Add intersection observer for better scroll animations
-  const observerOptions = {
-    threshold: 0.2,
-    rootMargin: '0px'
-  };
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-      }
-    });
-  }, observerOptions);
-  
-  document.querySelectorAll('.reveal').forEach(element => {
-    observer.observe(element);
+    }
   });
